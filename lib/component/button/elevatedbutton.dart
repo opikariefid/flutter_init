@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_init/theme.dart';
 import 'package:flutter_remix/flutter_remix.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../../theme.dart';
 
 class ButtonElevated extends StatelessWidget {
   final String title;
@@ -15,6 +15,7 @@ class ButtonElevated extends StatelessWidget {
   final Icon iconLeft;
   final Icon iconRight;
   final bool justify;
+  final bool disabled;
   final EdgeInsetsGeometry margin;
   final Color bgcolor;
   final Color color;
@@ -36,6 +37,7 @@ class ButtonElevated extends StatelessWidget {
     ),
     this.shadow = true,
     this.selected = false,
+    this.disabled = false,
     this.showIcon = 'none',
     this.iconOnly = false,
     this.iconLeft = const Icon(FlutterRemix.user_line),
@@ -45,6 +47,8 @@ class ButtonElevated extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _bgcolor = disabled ? bgcolor.withAlpha(200) : bgcolor;
+    var _color = disabled ? color.withAlpha(200) : color;
     return Container(
       margin: margin,
       height: height,
@@ -52,7 +56,7 @@ class ButtonElevated extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
         boxShadow: [
-          if (shadow)
+          if (shadow && !disabled)
             const BoxShadow(
                 color: Color.fromRGBO(0, 0, 0, 0.20000000298023224),
                 offset: Offset(0, 3),
@@ -60,12 +64,12 @@ class ButtonElevated extends StatelessWidget {
         ],
       ),
       child: ElevatedButton(
-        onPressed: onPressed,
+        onPressed: disabled ? () {} : onPressed,
         style: ElevatedButton.styleFrom(
-          onPrimary: color,
+          onPrimary: _color,
           elevation: 0,
           shadowColor: Colors.transparent,
-          primary: bgcolor,
+          primary: _bgcolor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
           ),

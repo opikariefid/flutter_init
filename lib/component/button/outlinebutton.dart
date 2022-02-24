@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_init/theme.dart';
 import 'package:flutter_remix/flutter_remix.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import '../../theme.dart';
 
 class ButtonOutline extends StatelessWidget {
   final String title;
@@ -13,14 +13,21 @@ class ButtonOutline extends StatelessWidget {
   final bool selected;
   final String showIcon;
   final bool iconOnly;
-  final Icon iconLeft;
-  final Icon iconRight;
+  final iconLeft;
+  final bool vertical;
+  final iconRight;
+  final double letterSpacing;
+  final double textGap;
+  final double textHeight;
+  final TextAlign textAlign;
+  final FontWeight fontWeight;
   final EdgeInsetsGeometry margin;
   final Color bgcolor;
   final Color color;
   final bool shadow;
   final bool inverted;
   final bool justify;
+  final bool disabled;
   final VoidCallback onPressed;
   const ButtonOutline({
     Key? key,
@@ -29,17 +36,24 @@ class ButtonOutline extends StatelessWidget {
     this.bgcolor = AppColors.textPrimary,
     this.size = 15,
     this.border = 1,
+    this.textGap = 0,
     this.radius = 0,
+    this.letterSpacing = 0,
+    this.textAlign = TextAlign.left,
     required this.onPressed,
     this.width = 100,
     this.height = 50,
+    this.textHeight = 1.5,
+    this.fontWeight = FontWeight.normal,
     this.margin = const EdgeInsets.only(
       top: 5,
       bottom: 5,
     ),
     this.shadow = true,
+    this.vertical = false,
     this.inverted = false,
     this.selected = false,
+    this.disabled = false,
     this.showIcon = 'none',
     this.iconOnly = false,
     this.iconLeft = const Icon(FlutterRemix.user_line),
@@ -49,6 +63,8 @@ class ButtonOutline extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var _bgcolor = disabled ? bgcolor.withAlpha(200) : bgcolor;
+    var _color = disabled ? color.withAlpha(200) : color;
     return Container(
       margin: margin,
       height: height,
@@ -56,7 +72,7 @@ class ButtonOutline extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(radius),
         boxShadow: [
-          if (shadow)
+          if (shadow && !disabled)
             const BoxShadow(
                 color: Color.fromRGBO(0, 0, 0, 0.20000000298023224),
                 offset: Offset(0, 3),
@@ -64,15 +80,16 @@ class ButtonOutline extends StatelessWidget {
         ],
       ),
       child: OutlinedButton(
-        onPressed: onPressed,
+        onPressed: disabled ? () {} : onPressed,
         style: OutlinedButton.styleFrom(
-          primary: inverted ? bgcolor : color,
-          backgroundColor: inverted ? color : bgcolor,
+          padding: EdgeInsets.zero,
+          primary: inverted ? _bgcolor : _color,
+          backgroundColor: inverted ? _color : _bgcolor,
           side: BorderSide(
               color: border > 0
                   ? inverted
-                      ? bgcolor
-                      : color
+                      ? _bgcolor
+                      : _color
                   : Colors.transparent,
               width: border),
           shape: RoundedRectangleBorder(
@@ -87,34 +104,79 @@ class ButtonOutline extends StatelessWidget {
               )
             : iconOnly
                 ? iconLeft
-                : Row(
-                    mainAxisAlignment: justify
-                        ? MainAxisAlignment.spaceBetween
-                        : MainAxisAlignment.center,
-                    children: [
-                      if (showIcon == 'left' || showIcon == 'both')
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            right: 5,
-                          ),
-                          child: iconLeft,
-                        ),
-                      Text(
-                        title,
-                        style: Theme.of(context).textTheme.button!.copyWith(
-                              color: inverted ? bgcolor : color,
-                              fontSize: size,
+                : vertical
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: justify
+                            ? MainAxisAlignment.spaceBetween
+                            : MainAxisAlignment.center,
+                        children: [
+                          if (showIcon == 'left' || showIcon == 'both')
+                            Padding(
+                              padding: EdgeInsets.only(
+                                right: vertical ? 0 : 5,
+                              ),
+                              child: iconLeft,
                             ),
-                      ),
-                      if (showIcon == 'right' || showIcon == 'both')
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 5,
+                          if (showIcon == 'left' || showIcon == 'both')
+                            Container(height: textGap),
+                          Text(
+                            title,
+                            textAlign: textAlign,
+                            style: Theme.of(context).textTheme.button!.copyWith(
+                                  color: inverted ? _bgcolor : _color,
+                                  fontSize: size,
+                                  letterSpacing: letterSpacing,
+                                  height: textHeight,
+                                  fontWeight: fontWeight,
+                                ),
                           ),
-                          child: iconRight,
-                        ),
-                    ],
-                  ),
+                          if (showIcon == 'right' || showIcon == 'both')
+                            Container(height: textGap),
+                          if (showIcon == 'right' || showIcon == 'both')
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: vertical ? 0 : 5,
+                              ),
+                              child: iconRight,
+                            ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: justify
+                            ? MainAxisAlignment.spaceBetween
+                            : MainAxisAlignment.center,
+                        children: [
+                          if (showIcon == 'left' || showIcon == 'both')
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                right: 5,
+                              ),
+                              child: iconLeft,
+                            ),
+                          if (showIcon == 'left' || showIcon == 'both')
+                            Container(width: textGap),
+                          Text(
+                            title,
+                            style: Theme.of(context).textTheme.button!.copyWith(
+                                  color: inverted ? _bgcolor : _color,
+                                  fontSize: size,
+                                  letterSpacing: letterSpacing,
+                                  height: textHeight,
+                                  fontWeight: fontWeight,
+                                ),
+                          ),
+                          if (showIcon == 'right' || showIcon == 'both')
+                            Container(width: textGap),
+                          if (showIcon == 'right' || showIcon == 'both')
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                left: 5,
+                              ),
+                              child: iconRight,
+                            ),
+                        ],
+                      ),
       ),
     );
   }
