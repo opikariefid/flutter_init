@@ -2,6 +2,7 @@ import 'package:flutter_init/pages/about.dart';
 import 'package:flutter_init/pages/demo.dart';
 import 'package:flutter_init/pages/example/button.dart';
 import 'package:flutter_init/pages/example/color.dart';
+import 'package:flutter_init/pages/example/form.dart';
 import 'package:flutter_init/pages/example/typography.dart';
 import 'package:flutter_init/pages/home/index.dart';
 import 'package:get/get.dart';
@@ -19,5 +20,6 @@ class AppPages {
     GetPage(
         name: AppRoutes.exampleButton, page: () => const ExampleButtonPage()),
     GetPage(name: AppRoutes.exampleColor, page: () => const ExampleColorPage()),
+    GetPage(name: AppRoutes.examplForm, page: () => const ExampleFormPage()),
   ];
 }

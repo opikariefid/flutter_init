@@ -96,6 +96,22 @@ class _DemoPageState extends State<DemoPage> {
                     top: 5,
                     bottom: 5,
                   ),
+                  title: 'Form',
+                  height: 50,
+                  shadow: true,
+                  width: Get.width,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: Get.width / 25,
+                  bgcolor: Theme.of(context).colorScheme.primary,
+                  onPressed: () {
+                    Get.toNamed('/example_form');
+                  },
+                ),
+                ButtonElevated(
+                  margin: EdgeInsets.only(
+                    top: 5,
+                    bottom: 5,
+                  ),
                   title: 'About App',
                   height: 50,
                   shadow: true,

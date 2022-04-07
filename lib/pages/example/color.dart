@@ -142,12 +142,16 @@ class _ExampleColorPageState extends State<ExampleColorPage> {
                         title: 'Bottom Appbar',
                         onPressed: () {},
                         bgcolor: Theme.of(context).bottomAppBarColor,
+                        color: calculateTextColor(
+                            Theme.of(context).bottomAppBarColor),
                       ),
                       ButtonElevated(
                         width: Get.width,
                         title: 'Canvas',
                         onPressed: () {},
                         bgcolor: Theme.of(context).canvasColor,
+                        color:
+                            calculateTextColor(Theme.of(context).canvasColor),
                       ),
                       ButtonElevated(
                         width: Get.width,
@@ -166,6 +170,7 @@ class _ExampleColorPageState extends State<ExampleColorPage> {
                         title: 'Card',
                         onPressed: () {},
                         bgcolor: Theme.of(context).cardColor,
+                        color: calculateTextColor(Theme.of(context).cardColor),
                       ),
                       ButtonElevated(
                         width: Get.width,

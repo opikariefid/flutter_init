@@ -1,10 +1,13 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart';
 
 class AppColors {
-  static const Color appPrimary = Color(0xFF3498db);
+  static const Color appPrimary = Color(0xFF1892C1);
   static const Color textPrimary = Colors.white;
   static const Color appPrimary2 = Color(0xFF1E8EE3);
   static const Color appAccent = Color(0xFFDDEFFF);
@@ -37,84 +40,79 @@ class AppColors {
   }
 }
 
+final priceFormat = NumberFormat.currency(
+  locale: 'id_ID',
+  decimalDigits: 0,
+  name: 'Rp. ',
+);
+
+final priceOnlyFormat = NumberFormat.currency(
+  locale: 'id_ID',
+  decimalDigits: 0,
+  name: '',
+);
+
+String kmbGenerator(value) {
+  if (value > 999 && value < 99999) {
+    return "${(value / 1000).toStringAsFixed(1)}K";
+  } else if (value > 99999 && value < 999999) {
+    return "${(value / 1000).toStringAsFixed(0)}K";
+  } else if (value > 999999 && value < 999999999) {
+    return "${(value / 1000000).toStringAsFixed(1)}M";
+  } else if (value > 999999999) {
+    return "${(value / 1000000000).toStringAsFixed(1)}B";
+  } else {
+    return value.toString();
+  }
+}
+
+bytesToSize(bytes) {
+  var result = {
+    'size': 0,
+    'type': 'Bytes',
+  };
+  final sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+  if (bytes == 0) return result;
+  final i = (log(bytes).floor() / log(1024)).toInt();
+  result = {
+    'size': (bytes / pow(1024, i)).round(),
+    'type': sizes[i],
+  };
+  return result;
+}
+
 class AppVariables {
-  static const EdgeInsets containerPadding = EdgeInsets.only(
-    left: 15,
-    right: 15,
+  static const appPadding = 15.0;
+  static const EdgeInsets containerPadding = EdgeInsets.symmetric(
+    horizontal: appPadding,
   );
+  static const EdgeInsets containerSpacing = EdgeInsets.symmetric(
+    vertical: appPadding,
+  );
+  static buatHargaPersen(harga, potongan) {
+    final data = ((potongan / harga) * 100).round();
+    return data;
+  }
 }
 
-bool isDarkMode() {
-  var brightness = SchedulerBinding.instance!.window.platformBrightness;
-  bool isDarkMode = brightness == Brightness.dark;
-  return isDarkMode;
+Color calculateTextColor(Color background) {
+  return ThemeData.estimateBrightnessForColor(background) == Brightness.light
+      ? Colors.black
+      : Colors.white;
 }
 
-ThemeData darkTheme(context) {
-  var textTheme = GoogleFonts.poppinsTextTheme(
-    Theme.of(context)
-        .textTheme
-        .apply(
-          displayColor: AppColors.text,
-          bodyColor: AppColors.background,
-        )
-        .copyWith(
-          subtitle1: const TextStyle(
-            color: Colors.white,
-          ),
-        ),
-  );
-  final ColorScheme colorSceme = Theme.of(context).colorScheme.copyWith(
-        primary: AppColors.primaryDark,
-        secondary: AppColors.secondaryDark,
-        background: AppColors.backgroundDark,
-        surface: AppColors.surfaceDark,
-      );
-  const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
-    fillColor: AppColors.surfaceDark,
-    hintStyle: TextStyle(color: AppColors.appAccent),
-    border: OutlineInputBorder(
-      borderSide: BorderSide(
-        color: Colors.transparent,
-      ),
-    ),
-  );
-  TabBarTheme tabBarTheme = TabBarTheme(
-    indicator: const UnderlineTabIndicator(
-      borderSide: BorderSide(
-        color: Colors.white,
-        width: 2.0,
-      ),
-    ),
-    labelColor: Colors.white,
-    labelStyle: GoogleFonts.poppins(
-      fontSize: Get.width / 30,
-      color: Colors.white,
-    ),
-    unselectedLabelColor: Colors.white.withAlpha(100),
-    unselectedLabelStyle: GoogleFonts.poppins(
-      fontSize: Get.width / 30,
-      color: Colors.white.withAlpha(100),
-    ),
-  );
-  return ThemeData(
-    tabBarTheme: tabBarTheme,
-    inputDecorationTheme: inputDecorationTheme,
-    textTheme: textTheme,
-    colorScheme: colorSceme,
-    errorColor: AppColors.appDanger,
-    switchTheme: SwitchThemeData(
-      trackColor: MaterialStateProperty.resolveWith(AppColors.switchColor),
-      thumbColor: MaterialStateProperty.resolveWith(AppColors.switchColor),
-    ),
-  );
-}
-
-ThemeData lightTheme(context) {
-  final defaultTextStyle = TextStyle(
-    color: AppColors.textDark,
-  );
-  final textTheme = GoogleFonts.poppinsTextTheme(
+loadTextTheme(context, type) {
+  var defaultTextStyle;
+  if (type == 'dark') {
+    defaultTextStyle = TextStyle(
+      color: AppColors.text,
+    );
+  } else {
+    defaultTextStyle = TextStyle(
+      color: AppColors.textDark,
+    );
+  }
+  return GoogleFonts.poppinsTextTheme(
     Theme.of(context)
         .textTheme
         .apply(
@@ -163,7 +161,75 @@ ThemeData lightTheme(context) {
           ),
         ),
   );
+}
+
+bool isDarkMode() {
+  var brightness = SchedulerBinding.instance!.window.platformBrightness;
+  bool isDarkMode = brightness == Brightness.dark;
+  return isDarkMode;
+}
+
+ThemeData darkTheme(context) {
   final ColorScheme colorSceme = Theme.of(context).colorScheme.copyWith(
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onBackground: Colors.white,
+        onSurface: Colors.white,
+        primary: AppColors.primaryDark,
+        secondary: AppColors.secondaryDark,
+        background: AppColors.backgroundDark,
+        surface: AppColors.surfaceDark,
+      );
+  const InputDecorationTheme inputDecorationTheme = InputDecorationTheme(
+    fillColor: AppColors.surfaceDark,
+    hintStyle: TextStyle(color: AppColors.appAccent),
+    border: OutlineInputBorder(
+      borderSide: BorderSide(
+        color: Colors.transparent,
+      ),
+    ),
+  );
+  TabBarTheme tabBarTheme = TabBarTheme(
+    indicator: const UnderlineTabIndicator(
+      borderSide: BorderSide(
+        color: Colors.white,
+        width: 2.0,
+      ),
+    ),
+    labelColor: Colors.white,
+    labelStyle: GoogleFonts.poppins(
+      fontSize: Get.width / 30,
+      color: Colors.white,
+    ),
+    unselectedLabelColor: Colors.white.withAlpha(100),
+    unselectedLabelStyle: GoogleFonts.poppins(
+      fontSize: Get.width / 30,
+      color: Colors.white.withAlpha(100),
+    ),
+  );
+  RadioThemeData radioTheme = RadioThemeData(
+    fillColor: MaterialStateProperty.resolveWith(AppColors.switchColor),
+  );
+  return ThemeData(
+    radioTheme: radioTheme,
+    tabBarTheme: tabBarTheme,
+    inputDecorationTheme: inputDecorationTheme,
+    textTheme: loadTextTheme(context, 'dark'),
+    colorScheme: colorSceme,
+    errorColor: AppColors.appDanger,
+    switchTheme: SwitchThemeData(
+      trackColor: MaterialStateProperty.resolveWith(AppColors.switchColor),
+      thumbColor: MaterialStateProperty.resolveWith(AppColors.switchColor),
+    ),
+  );
+}
+
+ThemeData lightTheme(context) {
+  final ColorScheme colorSceme = Theme.of(context).colorScheme.copyWith(
+        onPrimary: Colors.white,
+        onSecondary: Colors.white,
+        onBackground: Colors.black,
+        onSurface: Colors.black,
         primary: AppColors.primary,
         secondary: AppColors.secondary,
         background: AppColors.background,
@@ -196,10 +262,14 @@ ThemeData lightTheme(context) {
       color: AppColors.primary.withAlpha(100),
     ),
   );
+  RadioThemeData radioTheme = RadioThemeData(
+    fillColor: MaterialStateProperty.resolveWith(AppColors.switchColor),
+  );
   return ThemeData(
+    radioTheme: radioTheme,
     tabBarTheme: tabBarTheme,
     inputDecorationTheme: inputDecorationTheme,
-    textTheme: textTheme,
+    textTheme: loadTextTheme(context, 'light'),
     colorScheme: colorSceme,
     errorColor: AppColors.appDanger,
     switchTheme: SwitchThemeData(

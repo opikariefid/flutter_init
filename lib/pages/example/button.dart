@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_init/component/appbar/AppBarBack.dart';
-import 'package:flutter_init/component/button/elevatedbutton.dart';
-import 'package:flutter_init/component/button/iconbutton.dart';
-import 'package:flutter_init/component/button/outlinebutton.dart';
-import 'package:flutter_init/component/button/textbutton.dart';
+import 'package:flutter_init/component/button/buttonvariant.dart';
 import 'package:flutter_init/theme.dart';
 import 'package:flutter_remix/flutter_remix.dart';
 import 'package:get/get.dart';
@@ -38,214 +35,113 @@ class _ExampleButtonPageState extends State<ExampleButtonPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Button Elevated',
+                  'Button Variant',
                   style: Theme.of(context).textTheme.caption,
                 ),
-                ButtonElevated(
+                ButtonVariant(
+                  label: 'Default',
                   width: Get.width,
-                  title: 'Primary',
                   onPressed: () {},
                 ),
-                ButtonElevated(
-                  bgcolor: AppColors.appWarning,
-                  width: Get.width,
-                  title: 'Warning',
-                  onPressed: () {},
-                ),
-                ButtonElevated(
-                  bgcolor: AppColors.appDanger,
-                  width: Get.width,
-                  title: 'Danger',
-                  onPressed: () {},
-                ),
-                ButtonElevated(
-                  bgcolor: AppColors.appSuccess,
-                  width: Get.width,
-                  title: 'Success',
-                  onPressed: () {},
-                ),
-                Text(
-                  'Rounded',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonElevated(
-                  radius: 30,
-                  bgcolor: AppColors.appPrimary,
-                  width: Get.width,
-                  title: 'Default',
-                  onPressed: () {},
-                ),
-                Text(
-                  'Remove Shadow',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonElevated(
-                  radius: 30,
-                  shadow: false,
-                  width: Get.width,
-                  title: 'Remove Shadow',
-                  onPressed: () {},
-                ),
-                Text(
-                  'Custom Font Size',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonElevated(
-                  radius: 30,
-                  size: 25,
-                  width: Get.width,
-                  title: 'Custom Font Size',
-                  onPressed: () {},
-                ),
-                Text(
-                  'With Icon',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonElevated(
-                  radius: 30,
-                  width: Get.width,
-                  title: 'Back',
-                  showIcon: 'left',
-                  iconLeft: Icon(FlutterRemix.arrow_left_line),
-                  iconRight: Icon(FlutterRemix.arrow_right_line),
-                  onPressed: () {},
-                ),
-                ButtonElevated(
-                  radius: 30,
-                  width: Get.width,
-                  title: 'Back',
-                  showIcon: 'both',
-                  iconLeft: Icon(FlutterRemix.arrow_left_line),
-                  iconRight: Icon(FlutterRemix.arrow_right_line),
-                  onPressed: () {},
-                ),
-                ButtonElevated(
-                  radius: 30,
-                  width: Get.width,
-                  title: 'Back',
-                  showIcon: 'both',
-                  justify: true,
-                  iconLeft: Icon(FlutterRemix.arrow_left_line),
-                  iconRight: Icon(FlutterRemix.arrow_right_line),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SliverToBoxAdapter(
-          child: Divider(
-            indent: 15,
-            endIndent: 15,
-            color: Colors.black45,
-            height: 50,
-            thickness: 2,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: AppVariables.containerPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Button Outline',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonOutline(
-                  width: Get.width,
-                  title: 'Default',
-                  onPressed: () {},
-                ),
-                ButtonOutline(
+                ButtonVariant(
                   color: AppColors.appWarning,
                   width: Get.width,
-                  title: 'Warning',
+                  label: 'Warning',
                   onPressed: () {},
                 ),
-                ButtonOutline(
+                ButtonVariant(
                   color: AppColors.appDanger,
                   width: Get.width,
-                  title: 'Danger',
+                  label: 'Danger',
                   onPressed: () {},
                 ),
-                ButtonOutline(
+                ButtonVariant(
                   color: AppColors.appSuccess,
                   width: Get.width,
-                  title: 'Success',
+                  label: 'Success',
                   onPressed: () {},
                 ),
                 Text(
                   'Rounded',
                   style: Theme.of(context).textTheme.caption,
                 ),
-                ButtonOutline(
+                ButtonVariant(
                   radius: 30,
                   width: Get.width,
-                  title: 'Rounded',
+                  label: 'Rounded',
                   onPressed: () {},
                 ),
                 Text(
                   'Remove Shadow',
                   style: Theme.of(context).textTheme.caption,
                 ),
-                ButtonOutline(
+                ButtonVariant(
                   shadow: false,
                   width: Get.width,
-                  title: 'Remove Shadow',
+                  label: 'Remove Shadow',
                   onPressed: () {},
                 ),
                 Text(
                   'Custom Font Size',
                   style: Theme.of(context).textTheme.caption,
                 ),
-                ButtonOutline(
-                  size: 25,
+                ButtonVariant(
                   width: Get.width,
-                  title: 'Custom Font Size',
+                  label: 'Custom Font Size',
+                  textStyle: Theme.of(context).textTheme.button!.copyWith(
+                        fontSize: 20,
+                      ),
                   onPressed: () {},
                 ),
                 Text(
                   'Inverted',
                   style: Theme.of(context).textTheme.caption,
                 ),
-                ButtonOutline(
-                  inverted: true,
+                ButtonVariant(
+                  isInverted: true,
                   width: Get.width,
-                  title: 'Inverted',
+                  label: 'Inverted',
                   onPressed: () {},
                 ),
                 Text(
-                  'With Icon',
+                  'Disabled',
                   style: Theme.of(context).textTheme.caption,
                 ),
-                ButtonOutline(
-                  border: 0,
-                  shadow: false,
-                  title: 'Back',
-                  showIcon: 'left',
-                  iconLeft: Icon(FlutterRemix.arrow_left_line),
+                ButtonVariant(
+                  isDisabled: true,
+                  width: Get.width,
+                  label: 'Disabled',
+                  onPressed: () {},
+                ),
+                Text(
+                  'Loading',
+                  style: Theme.of(context).textTheme.caption,
+                ),
+                ButtonVariant(
+                  isLoading: true,
                   width: Get.width,
                   onPressed: () {},
                 ),
-                ButtonOutline(
-                  border: 0,
-                  shadow: false,
-                  title: 'Back',
-                  showIcon: 'both',
-                  iconLeft: Icon(FlutterRemix.arrow_left_line),
-                  iconRight: Icon(FlutterRemix.arrow_right_line),
-                  width: Get.width,
-                  onPressed: () {},
+                Text(
+                  'Custom Layout',
+                  style: Theme.of(context).textTheme.caption,
                 ),
-                ButtonOutline(
-                  border: 0,
-                  shadow: false,
-                  title: 'Back',
-                  showIcon: 'both',
-                  justify: true,
-                  iconLeft: Icon(FlutterRemix.arrow_left_line),
-                  iconRight: Icon(FlutterRemix.arrow_right_line),
+                ButtonVariant(
+                  shadow: true,
+                  isChild: true,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(FlutterRemix.user_line),
+                      SizedBox(
+                        width: 5,
+                      ),
+                      Text(
+                        'User',
+                        style: Theme.of(context).textTheme.button,
+                      ),
+                    ],
+                  ),
                   width: Get.width,
                   onPressed: () {},
                 ),
@@ -254,69 +150,8 @@ class _ExampleButtonPageState extends State<ExampleButtonPage> {
           ),
         ),
         const SliverToBoxAdapter(
-          child: Divider(
-            indent: 15,
-            endIndent: 15,
-            color: Colors.black45,
-            height: 50,
-            thickness: 2,
-          ),
-        ),
-        SliverToBoxAdapter(
-          child: Padding(
-            padding: AppVariables.containerPadding,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Button Text',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonText(
-                  text: 'Primary',
-                  width: Get.width,
-                  onPressed: () {},
-                ),
-                ButtonText(
-                  text: 'Warning',
-                  width: Get.width,
-                  color: AppColors.appWarning,
-                  onPressed: () {},
-                ),
-                ButtonText(
-                  text: 'Danger',
-                  width: Get.width,
-                  color: AppColors.appDanger,
-                  onPressed: () {},
-                ),
-                ButtonText(
-                  text: 'Success',
-                  width: Get.width,
-                  color: AppColors.appSuccess,
-                  onPressed: () {},
-                ),
-                Text(
-                  'Rounded',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonText(
-                  radius: 30,
-                  text: 'Rounded',
-                  width: Get.width,
-                  onPressed: () {},
-                ),
-                Text(
-                  'Custom Font Size',
-                  style: Theme.of(context).textTheme.caption,
-                ),
-                ButtonText(
-                  text: 'Custom Font Size',
-                  size: 25,
-                  width: Get.width,
-                  onPressed: () {},
-                ),
-              ],
-            ),
+          child: SizedBox(
+            height: 10,
           ),
         ),
       ],
