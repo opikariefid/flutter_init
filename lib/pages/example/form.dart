@@ -59,7 +59,30 @@ class _ExampleFormPageState extends State<ExampleFormPage> {
                   style: Theme.of(context).textTheme.caption,
                 ),
                 InputDropdown(
-                  input: inputDropdown,
+                  enabled: false,
+                  fillColor: Theme.of(context).colorScheme.background,
+                  controller: inputDropdown,
+                  radius: 10,
+                  label: "",
+                  placeholder: "Select Data...",
+                  data: dropdownList,
+                  onChanged: (newValue) {
+                    setState(() {
+                      inputDropdown = newValue;
+                    });
+                  },
+                ),
+                InputDropdown(
+                  enabled: true,
+                  fillColor: Theme.of(context).colorScheme.primary,
+                  isFilled: true,
+                  labelStyle: Theme.of(context)
+                      .textTheme
+                      .caption!
+                      .copyWith(color: Colors.white),
+                  controller: inputDropdown,
+                  border: 0,
+                  radius: 10,
                   label: "",
                   placeholder: "Select Data...",
                   data: dropdownList,

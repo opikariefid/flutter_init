@@ -4,20 +4,32 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class InputDropdown extends StatelessWidget {
   final List data;
-  final String input;
+  final String controller;
   final String label;
   final double margin;
+  final double border;
   final placeholder;
+  final labelStyle;
+  final double radius;
+  final bool enabled;
   final bool isError;
+  final bool isFilled;
+  final Color fillColor;
   final Widget icon;
   final String errorMessage;
   final void Function(dynamic newValue) onChanged;
   const InputDropdown({
     Key? key,
-    required this.input,
+    required this.controller,
     required this.label,
     required this.data,
+    this.enabled = true,
+    this.fillColor = Colors.transparent,
+    this.isFilled = false,
     this.margin = 10,
+    this.border = 1,
+    this.radius = 0,
+    this.labelStyle = "",
     this.placeholder = "Pilih...",
     this.errorMessage = "Mohon untuk diisi.",
     this.isError = false,
@@ -34,6 +46,8 @@ class InputDropdown extends StatelessWidget {
       }
     ];
     _data.addAll(data);
+    final _labelStyle =
+        labelStyle == "" ? Theme.of(context).textTheme.caption : labelStyle;
     return Padding(
       padding: EdgeInsets.symmetric(vertical: margin),
       child: Column(
@@ -41,8 +55,12 @@ class InputDropdown extends StatelessWidget {
         children: [
           InputDecorator(
             decoration: InputDecoration(
+              filled: !enabled || isFilled,
+              fillColor: !enabled ? fillColor.withOpacity(.25) : fillColor,
               enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(radius),
                 borderSide: BorderSide(
+                    width: border,
                     color: isError
                         ? Theme.of(context).colorScheme.error
                         : Theme.of(context)
@@ -55,42 +73,52 @@ class InputDropdown extends StatelessWidget {
               contentPadding: const EdgeInsets.symmetric(horizontal: 15),
               border: const OutlineInputBorder(),
             ),
-            child: DropdownButton(
-              icon: icon,
-              dropdownColor: Theme.of(context).colorScheme.surface,
-              style: Theme.of(context).textTheme.caption,
-              alignment: Alignment.center,
-              isExpanded: true,
-              underline: const SizedBox(),
-              value: input,
-              items: List.generate(
-                _data.length,
-                (index) {
-                  final getData = _data[index];
-                  print(data);
-                  return DropdownMenuItem(
-                    enabled: getData['id'] != '' ? true : false,
-                    value: getData['id'],
-                    child: Text(
-                      getData['label'],
-                      style: Theme.of(context).textTheme.caption!.copyWith(
-                          color: getData['id'] != ''
-                              ? Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .color!
-                                  .withOpacity(1)
-                              : Theme.of(context)
-                                  .textTheme
-                                  .caption!
-                                  .color!
-                                  .withOpacity(.3)),
+            child: !enabled
+                ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        placeholder,
+                        style: _labelStyle!.copyWith(
+                            color: !enabled
+                                ? _labelStyle!.color.withOpacity(.5)
+                                : _labelStyle!.color),
+                      ),
+                    ],
+                  )
+                : DropdownButton(
+                    icon: icon,
+                    iconDisabledColor: Colors.grey.withOpacity(.5),
+                    iconEnabledColor: !enabled
+                        ? Colors.grey.withOpacity(.5)
+                        : _labelStyle.color,
+                    dropdownColor: fillColor,
+                    style: Theme.of(context).textTheme.caption,
+                    alignment: Alignment.center,
+                    isExpanded: true,
+                    underline: const SizedBox(),
+                    value: controller,
+                    items: List.generate(
+                      _data.length,
+                      (index) {
+                        final getData = _data[index];
+                        return DropdownMenuItem(
+                          enabled: getData['id'] != '' ? true : false,
+                          value: getData['id'],
+                          child: Text(
+                            getData['label'],
+                            style: _labelStyle!.copyWith(
+                                color: !enabled
+                                    ? Colors.grey.withOpacity(.5)
+                                    : getData['id'] != ''
+                                        ? _labelStyle.color
+                                        : _labelStyle.color!.withOpacity(.3)),
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-              onChanged: onChanged,
-            ),
+                    onChanged: onChanged,
+                  ),
           ),
           if (isError)
             Padding(
