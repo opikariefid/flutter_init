@@ -15,11 +15,17 @@ class InputText extends StatelessWidget {
   final bool customErrorLayout;
   final bool showCounter;
   final bool enableBorder;
+  final bool isFill;
   final int maxLength;
   final TextAlign textAlign;
+  final TextInputAction inputAction;
   final TextInputType inputType;
   final TextEditingController controller;
   final String labelPosition;
+  final fillColor;
+  final inputStyle;
+  final labelStyle;
+  final placeholderStyle;
   final void Function() onEditingComplete;
   final void Function(String newValue) onSubmit;
   final void Function(String newValue) onChanged;
@@ -42,21 +48,35 @@ class InputText extends StatelessWidget {
     this.enableBorder = true,
     this.textAlign = TextAlign.start,
     this.inputType = TextInputType.name,
+    this.inputAction = TextInputAction.done,
+    this.inputStyle = "",
+    this.labelStyle = "",
+    this.placeholderStyle = "",
     this.labelPosition = 'float',
     this.multiText = false,
     this.isPassword = false,
     this.showCounter = false,
     this.maxLength = TextField.noMaxLength,
+    this.isFill = false,
+    this.fillColor = Colors.transparent,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final _inputStyle =
+        inputStyle == "" ? Theme.of(context).textTheme.caption : inputStyle;
+    final _placeholderStyle = placeholderStyle == ""
+        ? Theme.of(context).textTheme.caption
+        : placeholderStyle;
+    final _labelStyle =
+        labelStyle == "" ? Theme.of(context).textTheme.subtitle1 : labelStyle;
     var counterText = "".obs;
     final TextFormField textChild = TextFormField(
+      textInputAction: inputAction,
       obscureText: isPassword,
       maxLength: maxLength,
       autofocus: autofocus,
-      style: Theme.of(context).textTheme.caption,
+      style: _inputStyle,
       textAlign: textAlign,
       keyboardType: inputType,
       inputFormatters: <TextInputFormatter>[
@@ -68,8 +88,8 @@ class InputText extends StatelessWidget {
       maxLines: multiText ? 3 : 1,
       controller: controller,
       decoration: InputDecoration(
-        filled: !enabled,
-        fillColor: !enabled ? Colors.grey.withOpacity(.1) : Colors.transparent,
+        filled: !enabled || isFill,
+        fillColor: !enabled ? fillColor.withOpacity(.25) : fillColor,
         isDense: isDense,
         enabled: enabled,
         contentPadding: inputPadding,
@@ -93,10 +113,10 @@ class InputText extends StatelessWidget {
             : FloatingLabelBehavior.never,
         floatingLabelStyle: Theme.of(context).textTheme.subtitle1,
         hintText: placeholder,
-        hintStyle: Theme.of(context).textTheme.caption!.copyWith(
-            color: Theme.of(context).textTheme.caption!.color!.withAlpha(80)),
+        hintStyle: _placeholderStyle!
+            .copyWith(color: _placeholderStyle!.color!.withOpacity(.5)),
         labelText: labelPosition == 'float' ? label : null,
-        labelStyle: Theme.of(context).textTheme.subtitle1,
+        labelStyle: _labelStyle,
       ),
       onChanged: (newValue) {
         counterText.value = controller.text;
@@ -117,10 +137,10 @@ class InputText extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 5),
               child: Text(
                 label,
-                style: Theme.of(context).textTheme.caption!.copyWith(
+                style: _labelStyle!.copyWith(
                     color: !enabled
                         ? Colors.grey.withOpacity(.1)
-                        : Theme.of(context).textTheme.caption!.color),
+                        : _labelStyle!.color),
               ),
             ),
           textChild,
