@@ -97,17 +97,21 @@ class ButtonVariant extends StatelessWidget {
                 ? child
                 : Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        label,
-                        style: _textStyle,
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 10),
+                        child: Text(
+                          label,
+                          style: _textStyle,
+                        ),
                       ),
                     ],
                   );
     return Container(
       margin: margin,
       height: height,
-      width: width,
+      width: width != 0 ? width : null,
       decoration: BoxDecoration(
         color: isDisabled || isLoading
             ? isInverted

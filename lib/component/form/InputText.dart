@@ -16,7 +16,9 @@ class InputText extends StatelessWidget {
   final bool showCounter;
   final bool enableBorder;
   final bool isFill;
+  final bool hasErrorText;
   final int maxLength;
+  final double radius;
   final TextAlign textAlign;
   final TextInputAction inputAction;
   final TextInputType inputType;
@@ -53,9 +55,11 @@ class InputText extends StatelessWidget {
     this.labelStyle = "",
     this.placeholderStyle = "",
     this.labelPosition = 'float',
+    this.radius = 5,
     this.multiText = false,
     this.isPassword = false,
     this.showCounter = false,
+    this.hasErrorText = false,
     this.maxLength = TextField.noMaxLength,
     this.isFill = false,
     this.fillColor = Colors.transparent,
@@ -88,6 +92,12 @@ class InputText extends StatelessWidget {
       maxLines: multiText ? 3 : 1,
       controller: controller,
       decoration: InputDecoration(
+        errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(radius),
+            borderSide: const BorderSide(color: Colors.red)),
+        errorStyle: hasErrorText
+            ? _inputStyle!.merge(const TextStyle(color: Colors.red))
+            : const TextStyle(height: 0, color: Colors.transparent),
         filled: !enabled || isFill,
         fillColor: !enabled ? fillColor.withOpacity(.25) : fillColor,
         isDense: isDense,
@@ -97,6 +107,7 @@ class InputText extends StatelessWidget {
         counterStyle: TextStyle(
             height: showCounter ? 1 : 0, fontSize: showCounter ? 12 : 0),
         enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(radius),
           borderSide: BorderSide(
               color: enableBorder
                   ? Theme.of(context).colorScheme.onBackground.withOpacity(.1)
